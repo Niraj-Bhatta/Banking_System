@@ -1,0 +1,25 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Transfer Funds</h2>
+
+    <!-- Display messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Transfer form -->
+    <form method="POST" class="card p-4 shadow-sm">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary">Send Money</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center mt-5">
+    <div class="col-md-6">
+
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center rounded-top-4">
+                <h4 class="mb-0">💸 Transfer Funds</h4>
+            </div>
+
+            <div class="card-body p-4">
+
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert 
+                            {% if message.tags == 'error' %}alert-danger
+                            {% elif message.tags == 'success' %}alert-success
+                            {% else %}alert-info
+                            {% endif %} alert-dismissible fade show">
+
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Transfer Form -->
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg rounded-3">
+                            🚀 Send Money
+                        </button>
+
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-3">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

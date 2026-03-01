@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Home - Bank System{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1>Welcome to BankSystem</h1>
+    <p class="lead">Manage your finances quickly and securely online.</p>
+    <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-2">Get Started</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">Login</a>
+</div>
+{% endblock %}
