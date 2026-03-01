@@ -148,7 +148,7 @@ This section presents the Use Case Diagram and ER Diagram of the Banking System.
 | Update Profile           |                            |
 
 
-<p align="center"> <img src="images\usecase.png" width="850"> </p>
+<p align="center"> <img src="images/usecase.png" width="850"> </p>
 
 ### 🔷 ER Diagram (Entity Relationship Diagram)
 
