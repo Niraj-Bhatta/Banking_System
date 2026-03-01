@@ -131,10 +131,10 @@ User (1) ─── (M) UserActivity
 
 ---
 
-###📊 System Design & Diagrams
+### 📊 System Design & Diagrams
 
 This section presents the Use Case Diagram and ER Diagram of the Banking System.
-🔷 Use Case Diagram
+# 🔷 Use Case Diagram
 | User Use Cases           | Admin Use Cases            |
 | ------------------------ | -------------------------- |
 | Register                 | Create User                |
@@ -150,14 +150,14 @@ This section presents the Use Case Diagram and ER Diagram of the Banking System.
 
 <p align="center"> <img src="images\usecase.png" width="850"> </p>
 
-###🔷 ER Diagram (Entity Relationship Diagram)
+### 🔷 ER Diagram (Entity Relationship Diagram)
 
-#📌 Overview
+# 📌 Overview
 
 The ER Diagram represents the database structure of the Banking System.
 It defines entities, attributes, and relationships to ensure proper data organization.
 
-#🗂️ Entity Structure
+# 🗂️ Entity Structure
 | Entity Name      | Primary Key    | Description                                          |
 | ---------------- | -------------- | ---------------------------------------------------- |
 | **User**         | id             | Stores authentication and personal details           |
@@ -165,15 +165,15 @@ It defines entities, attributes, and relationships to ensure proper data organiz
 | **Transaction**  | transaction_id | Records deposit, withdrawal, and transfer operations |
 | **UserActivity** | activity_id    | Logs login, logout, and system activities            |
 
-#🔗 Relationship Mapping
+# 🔗 Relationship Mapping
 | Relationship        | Cardinality | Explanation                                |
 | ------------------- | ----------- | ------------------------------------------ |
 | User → BankAccount  | 1 : 1       | Each user owns exactly one bank account    |
 | User → Transaction  | 1 : Many    | A user can perform multiple transactions   |
 | User → UserActivity | 1 : Many    | A user can generate multiple activity logs |
 
-#🖼️ ER Diagram
-<p align="center"> <img src="images\mermaid-diagram.png" width="900"> </p>
+# 🖼️ ER Diagram
+<p align="center"> <img src="banking/images/mermaid-diagram.png" width="900"> </p>
 
 
 # 📦 Installation Guide
