@@ -2,12 +2,12 @@
 <p align="center"> <img src="https://img.shields.io/badge/Framework-Django%205.2.8-green"> <img src="https://img.shields.io/badge/Python-3.11-blue"> <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20Bootstrap-orange"> <img src="https://img.shields.io/badge/Database-SQLite%20%7C%20Optional%20PostgreSQL/MySQL-purple"> </p>
 👨‍💻 Personal Information
 Field	Details
-Name	[Your Name Here]
+Name	Niraj Bhatta
 Role	Engineering Student / Developer
-College	[Your College Name]
-GitHub	https://github.com/yourusername
+College	Nepal College of Information Technology
+GitHub	https://github.com/Niraj-Bhatta
 
-Email	your.email@example.com
+Email	bhattaniraj559@gmail.com
 📌 Project Overview
 
 The Banking System is a web-based application built using Django to simulate real-world banking operations.
