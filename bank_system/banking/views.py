@@ -17,7 +17,8 @@ from .forms import (
     UserRegisterForm,
     UserUpdateForm,
     ProfileUpdateForm,
-    TransferForm
+    TransferForm,
+    DepositWithdrawForm,
 )
 
 # ================================
@@ -206,31 +207,31 @@ def dashboard(request):
 @login_required
 def deposit(request):
 
-    if request.method == 'POST':
+    form = DepositWithdrawForm(request.POST or None)
 
-        amount = Decimal(request.POST.get('amount'))
+    if request.method == 'POST' and form.is_valid():
+
+        amount = form.cleaned_data['amount']
         account = request.user.bank_account
 
         if amount <= 0:
-            messages.error(request, "Invalid deposit amount")
-            return redirect('dashboard')
+            messages.error(request, "Deposit amount must be greater than zero.")
+            return render(request, 'banking/deposit.html', {'form': form})
 
         with transaction.atomic():
-
             BankAccount.objects.filter(pk=account.pk).update(
                 balance=F('balance') + amount
             )
-
             Transaction.objects.create(
                 account=account,
                 amount=amount,
                 transaction_type='Deposit'
             )
 
-        messages.success(request, "Deposit successful")
+        messages.success(request, f"Successfully deposited ${amount:.2f} to your account.")
         return redirect('dashboard')
 
-    return render(request, 'banking/deposit.html')
+    return render(request, 'banking/deposit.html', {'form': form})
 
 
 # ================================
@@ -240,24 +241,28 @@ def deposit(request):
 @login_required
 def withdraw(request):
 
-    if request.method == 'POST':
+    form = DepositWithdrawForm(request.POST or None)
 
-        amount = Decimal(request.POST.get('amount'))
-        account = request.user.bank_account
+    if request.method == 'POST' and form.is_valid():
+
+        amount = form.cleaned_data['amount']
 
         if amount <= 0:
-            messages.error(request, "Invalid amount")
-            return redirect('dashboard')
-
-        if account.balance < amount:
-            messages.error(request, "Insufficient balance")
-            return redirect('dashboard')
+            messages.error(request, "Withdrawal amount must be greater than zero.")
+            return render(request, 'banking/withdraw.html', {'form': form})
 
         with transaction.atomic():
-
-            BankAccount.objects.filter(pk=account.pk).update(
-                balance=F('balance') - amount
+            # Re-read balance inside atomic block to prevent race conditions
+            account = BankAccount.objects.select_for_update().get(
+                user=request.user
             )
+
+            if account.balance < amount:
+                messages.error(request, f"Insufficient balance. Your balance is ${account.balance:.2f}.")
+                return render(request, 'banking/withdraw.html', {'form': form})
+
+            account.balance -= amount
+            account.save(update_fields=['balance'])
 
             Transaction.objects.create(
                 account=account,
@@ -265,10 +270,10 @@ def withdraw(request):
                 transaction_type='Withdraw'
             )
 
-        messages.success(request, "Withdrawal successful")
+        messages.success(request, f"Successfully withdrew ${amount:.2f} from your account.")
         return redirect('dashboard')
 
-    return render(request, 'banking/withdraw.html')
+    return render(request, 'banking/withdraw.html', {'form': form})
 
 
 # ================================
@@ -278,72 +283,76 @@ def withdraw(request):
 @login_required
 def transfer(request):
 
-    sender_account = request.user.bank_account
+    form = TransferForm(request.POST or None)
 
-    if request.method == "POST":
+    if request.method == "POST" and form.is_valid():
 
-        form = TransferForm(request.POST)
+        to_account_number = form.cleaned_data['to_account']
+        amount = form.cleaned_data['amount']
+        remarks = form.cleaned_data.get('remarks', '')
 
-        if form.is_valid():
+        # Validate recipient exists
+        try:
+            receiver_account = BankAccount.objects.get(
+                account_number=to_account_number
+            )
+        except BankAccount.DoesNotExist:
+            messages.error(request, "Recipient account not found. Please check the account number.")
+            return render(request, "banking/transfer.html", {"form": form})
 
-            to_account_number = form.cleaned_data['to_account']
-            amount = Decimal(form.cleaned_data['amount'])
-            remarks = form.cleaned_data.get('remarks', '')
+        with transaction.atomic():
+            # Re-read sender balance inside atomic block to prevent race conditions
+            sender_account = BankAccount.objects.select_for_update().get(
+                user=request.user
+            )
+
+            if sender_account.account_number == to_account_number:
+                messages.error(request, "You cannot transfer money to your own account.")
+                return render(request, "banking/transfer.html", {"form": form})
 
             if amount <= 0:
-                messages.error(request, "Amount must be greater than zero")
-                return redirect('transfer')
+                messages.error(request, "Transfer amount must be greater than zero.")
+                return render(request, "banking/transfer.html", {"form": form})
 
             if sender_account.balance < amount:
-                messages.error(request, "Insufficient balance")
-                return redirect('transfer')
-
-            try:
-                receiver_account = BankAccount.objects.get(
-                    account_number=to_account_number
+                messages.error(
+                    request,
+                    f"Insufficient balance. Your current balance is ${sender_account.balance:.2f}."
                 )
-            except BankAccount.DoesNotExist:
-                messages.error(request, "Recipient not found")
-                return redirect('transfer')
+                return render(request, "banking/transfer.html", {"form": form})
 
-            if sender_account == receiver_account:
-                messages.error(request, "Cannot transfer to same account")
-                return redirect('transfer')
+            # Deduct from sender
+            sender_account.balance -= amount
+            sender_account.save(update_fields=['balance'])
 
-            with transaction.atomic():
+            # Credit to receiver (also lock for update)
+            receiver_account = BankAccount.objects.select_for_update().get(
+                pk=receiver_account.pk
+            )
+            receiver_account.balance += amount
+            receiver_account.save(update_fields=['balance'])
 
-                BankAccount.objects.filter(pk=sender_account.pk).update(
-                    balance=F('balance') - amount
-                )
+            # Record outgoing transaction for sender
+            Transaction.objects.create(
+                account=sender_account,
+                to_account=receiver_account,
+                amount=amount,
+                transaction_type="Transfer",
+                remarks=remarks or f"Transfer to {receiver_account.account_number}"
+            )
 
-                BankAccount.objects.filter(pk=receiver_account.pk).update(
-                    balance=F('balance') + amount
-                )
+            # Record incoming transaction for receiver
+            Transaction.objects.create(
+                account=receiver_account,
+                amount=amount,
+                transaction_type="Deposit",
+                remarks=f"Received from {sender_account.account_number}"
+            )
 
-                Transaction.objects.create(
-                    account=sender_account,
-                    to_account=receiver_account,
-                    amount=amount,
-                    transaction_type="Transfer",
-                    remarks=remarks
-                )
-
-                Transaction.objects.create(
-                    account=receiver_account,
-                    amount=amount,
-                    transaction_type="Deposit",
-                    remarks=f"Received from {sender_account.account_number}"
-                )
-
-                UserActivity.objects.create(
-                    user=request.user,
-                    activity_type="Transfer"
-                )
-
-            messages.success(request, "Transfer successful")
-            return redirect('dashboard')
-
-    else:
-        form = TransferForm()
+        messages.success(
+            request,
+            f"Successfully transferred ${amount:.2f} to account {receiver_account.account_number}."
+        )
+        return redirect('dashboard')
 
     return render(request, "banking/transfer.html", {"form": form})

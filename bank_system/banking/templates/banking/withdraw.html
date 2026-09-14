@@ -93,8 +93,15 @@
                         </div>
                         <form method="POST" id="withdraw-form">
                             {% csrf_token %}
-                            <label for="amount">Amount</label>
-                            <input type="number" name="amount" id="amount" placeholder="Enter amount to withdraw" step="0.01" min="0.01" required>
+                            {% for field in form %}
+                            <div class="mb-4">
+                                <label for="{{ field.id_for_label }}" style="font-weight:600;font-size:0.875rem;color:#2b2d42;display:block;margin-bottom:0.4rem;">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger" style="font-size:0.82rem;margin-top:0.25rem;">{{ field.errors|join:', ' }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
                             <button type="submit" id="withdraw-submit-btn" class="btn-action-orange">Confirm Withdrawal</button>
                         </form>
                         <a href="{% url 'dashboard' %}" class="back-link">← Back to Dashboard</a>

@@ -54,7 +54,14 @@ class BankAccount(models.Model):
 
 class UserActivity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    activity_type = models.CharField(max_length=10, choices=[('Login','Login'),('Logout','Logout')])
+    activity_type = models.CharField(
+        max_length=10,
+        choices=[
+            ('Login', 'Login'),
+            ('Logout', 'Logout'),
+            ('Transfer', 'Transfer'),
+        ]
+    )
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
