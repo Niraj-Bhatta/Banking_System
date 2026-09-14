@@ -215,7 +215,7 @@
     <div class="row align-items-center">
         <div class="col-md-8">
             <div class="balance-label">Current Balance</div>
-            <div class="balance-amount">${{ account.balance }}</div>
+            <div class="balance-amount">${{ account.balance|floatformat:2 }}</div>
             <div class="balance-account-no">ACC • {{ account.account_number }}</div>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0" style="position:relative;z-index:2;">
@@ -234,14 +234,14 @@
     <div class="col-6 col-md-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:rgba(25,135,84,0.1);">💰</div>
-            <div class="stat-value text-success">${{ total_deposits }}</div>
+            <div class="stat-value text-success">${{ total_deposits|floatformat:2 }}</div>
             <div class="stat-label">Total Deposits</div>
         </div>
     </div>
     <div class="col-6 col-md-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:rgba(220,53,69,0.1);">💸</div>
-            <div class="stat-value text-danger">${{ total_withdrawals }}</div>
+            <div class="stat-value text-danger">${{ total_withdrawals|floatformat:2 }}</div>
             <div class="stat-label">Total Withdrawals</div>
         </div>
     </div>
@@ -318,9 +318,9 @@
                                 </td>
                                 <td class="fw-700" style="font-weight:700;">
                                     {% if tx.transaction_type == 'Withdraw' or tx.transaction_type == 'Transfer' %}
-                                        <span class="text-danger">-${{ tx.amount }}</span>
+                                        <span class="text-danger">-${{ tx.amount|floatformat:2 }}</span>
                                     {% else %}
-                                        <span class="text-success">+${{ tx.amount }}</span>
+                                        <span class="text-success">+${{ tx.amount|floatformat:2 }}</span>
                                     {% endif %}
                                 </td>
                                 <td class="text-muted">{{ tx.remarks|default:"—" }}</td>

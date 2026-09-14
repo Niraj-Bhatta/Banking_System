@@ -30,8 +30,18 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-LOGIN_URL = '/'  
-LOGIN_REDIRECT_URL = 'dashboard' 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = 'dashboard'
+
+# Map Django message levels to Bootstrap alert classes
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {
+    message_constants.DEBUG:   'secondary',
+    message_constants.INFO:    'info',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR:   'danger',
+}
 
 # Application definition
 
@@ -42,8 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'banking',  #added banking app
-    'crispy_forms', #for better form rendering : for good form ui
+    'banking',
 ]
 
 MIDDLEWARE = [
