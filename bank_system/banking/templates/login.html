@@ -1,26 +1,133 @@
 {% extends 'base.html' %}
-{% block title %}Login - Bank System{% endblock %}
+{% block title %}Login - BankSystem{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card p-4">
-            <h2 class="text-center mb-3">Login</h2>
-          <form method="POST">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" name="username" id="username" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" name="password" id="password" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary w-100">Login</button>
-</form>
-            <p class="text-center mt-3">
-                Don't have an account? <a href="{% url 'register' %}">Register here</a>
-            </p>
+<style>
+    .auth-wrapper {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+    }
+    .auth-card {
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(12px);
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .auth-card-header {
+        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        color: white;
+    }
+    .auth-card-header .icon-wrap {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+        backdrop-filter: blur(5px);
+    }
+    .auth-card-header h2 {
+        font-weight: 800;
+        font-size: 1.75rem;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+    .auth-card-header p {
+        opacity: 0.8;
+        margin: 0.5rem 0 0;
+        font-size: 0.95rem;
+    }
+    .auth-body {
+        padding: 2.5rem;
+    }
+    .form-label {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: #2b2d42;
+        margin-bottom: 0.4rem;
+    }
+    .form-control {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid #e9ecef;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #f8f9ff;
+    }
+    .form-control:focus {
+        border-color: #4361ee;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+        background: #fff;
+    }
+    .btn-auth {
+        padding: 0.85rem;
+        font-weight: 700;
+        font-size: 1rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        border: none;
+        letter-spacing: 0.3px;
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.35);
+        transition: all 0.3s ease;
+    }
+    .btn-auth:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.45);
+    }
+    .auth-divider {
+        text-align: center;
+        color: #adb5bd;
+        font-size: 0.875rem;
+        position: relative;
+        margin: 1.5rem 0;
+    }
+    .auth-link {
+        color: #4361ee;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .auth-link:hover { color: #3a0ca3; text-decoration: underline; }
+</style>
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-sm-8">
+                <div class="auth-card">
+                    <div class="auth-card-header">
+                        <div class="icon-wrap">🔐</div>
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to your BankSystem account</p>
+                    </div>
+                    <div class="auth-body">
+                        <form method="POST" id="login-form">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" id="login-submit-btn" class="btn btn-auth btn-primary w-100">Sign In</button>
+                        </form>
+                        <div class="auth-divider mt-4 text-center">
+                            <span>Don't have an account?</span>
+                            <a href="{% url 'register' %}" class="auth-link ms-1">Create one</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

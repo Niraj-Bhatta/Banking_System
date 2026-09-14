@@ -1,19 +1,149 @@
 {% extends 'base.html' %}
-{% block title %}Register - Bank System{% endblock %}
+{% block title %}Register - BankSystem{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card p-4">
-            <h2 class="text-center mb-3">Register</h2>
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary w-100">Register</button>
-            </form>
-            <p class="text-center mt-3">
-                Already have an account? <a href="{% url 'login' %}">Login here</a>
-            </p>
+<style>
+    .auth-wrapper {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        padding: 2rem 0;
+    }
+    .auth-card {
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(12px);
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .auth-card-header {
+        background: linear-gradient(135deg, #198754, #20c997);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        color: white;
+    }
+    .auth-card-header .icon-wrap {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+    }
+    .auth-card-header h2 {
+        font-weight: 800;
+        font-size: 1.75rem;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+    .auth-card-header p {
+        opacity: 0.85;
+        margin: 0.5rem 0 0;
+        font-size: 0.95rem;
+    }
+    .auth-body {
+        padding: 2.5rem;
+    }
+    .auth-body label {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: #2b2d42;
+        margin-bottom: 0.4rem;
+        display: block;
+    }
+    .auth-body input[type="text"],
+    .auth-body input[type="email"],
+    .auth-body input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: 1.5px solid #e9ecef;
+        font-size: 0.95rem;
+        background: #f8f9ff;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+        outline: none;
+        margin-bottom: 1.25rem;
+    }
+    .auth-body input:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.12);
+        background: #fff;
+    }
+    /* Style Django's auto-generated <p> tags */
+    .auth-body p {
+        margin-bottom: 0;
+    }
+    .helptext, .auth-body ul {
+        font-size: 0.8rem;
+        color: #adb5bd;
+        margin-top: -0.75rem;
+        margin-bottom: 1rem;
+        list-style: disc;
+        padding-left: 1.2rem;
+    }
+    .btn-auth-green {
+        padding: 0.85rem;
+        font-weight: 700;
+        font-size: 1rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #198754, #20c997);
+        border: none;
+        color: white;
+        width: 100%;
+        letter-spacing: 0.3px;
+        box-shadow: 0 6px 20px rgba(25, 135, 84, 0.35);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .btn-auth-green:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(25, 135, 84, 0.45);
+    }
+    .auth-link {
+        color: #198754;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .auth-link:hover { color: #145c38; text-decoration: underline; }
+    .errorlist {
+        color: #dc3545;
+        font-size: 0.82rem;
+        list-style: none;
+        padding: 0;
+        margin: -0.75rem 0 0.75rem;
+    }
+</style>
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-9">
+                <div class="auth-card">
+                    <div class="auth-card-header">
+                        <div class="icon-wrap">🎉</div>
+                        <h2>Create Account</h2>
+                        <p>Join BankSystem — it's free</p>
+                    </div>
+                    <div class="auth-body">
+                        <form method="POST" id="register-form">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" id="register-submit-btn" class="btn-auth-green mt-2">Create My Account</button>
+                        </form>
+                        <div class="mt-4 text-center">
+                            <span style="color:#6c757d; font-size:0.9rem;">Already have an account?</span>
+                            <a href="{% url 'login' %}" class="auth-link ms-1">Sign in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

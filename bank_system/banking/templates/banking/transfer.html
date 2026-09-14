@@ -1,53 +1,96 @@
-{% extends 'banking/base.html' %}
+{% extends 'base.html' %}
+{% block title %}Transfer - BankSystem{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center mt-5">
-    <div class="col-md-6">
+<style>
+    .action-wrapper { min-height: 65vh; display: flex; align-items: center; padding: 2rem 0; }
+    .action-card {
+        background: rgba(255,255,255,0.92);
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .action-header {
+        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        padding: 2.25rem 2rem;
+        text-align: center;
+        color: white;
+    }
+    .action-header .icon-wrap {
+        width: 64px; height: 64px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.15);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+    }
+    .action-header h2 { font-weight: 800; font-size: 1.75rem; margin: 0; letter-spacing: -0.5px; }
+    .action-header p { opacity: 0.82; margin: 0.4rem 0 0; font-size: 0.92rem; }
+    .action-body { padding: 2.5rem; }
+    .action-body label {
+        font-weight: 600; font-size: 0.875rem; color: #2b2d42;
+        margin-bottom: 0.4rem; display: block;
+    }
+    .action-body input[type="number"],
+    .action-body input[type="text"],
+    .action-body textarea {
+        display: block; width: 100%;
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+        border: 1.5px solid #e9ecef;
+        font-size: 1rem;
+        background: #f8f9ff;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+        outline: none;
+        margin-bottom: 1.5rem;
+    }
+    .action-body input:focus,
+    .action-body textarea:focus {
+        border-color: #4361ee;
+        box-shadow: 0 0 0 3px rgba(67,97,238,0.12);
+        background: #fff;
+    }
+    .action-body p { margin: 0; }
+    .btn-action-blue {
+        padding: 0.85rem;
+        font-weight: 700; font-size: 1rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        border: none; color: white; width: 100%;
+        box-shadow: 0 6px 20px rgba(67,97,238,0.35);
+        transition: all 0.3s ease; cursor: pointer;
+    }
+    .btn-action-blue:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(67,97,238,0.45); }
+    .back-link {
+        display: block; text-align: center; margin-top: 1.25rem;
+        font-size: 0.9rem; color: #6c757d; text-decoration: none;
+    }
+    .back-link:hover { color: #4361ee; }
+</style>
 
-        <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-header bg-primary text-white text-center rounded-top-4">
-                <h4 class="mb-0">💸 Transfer Funds</h4>
-            </div>
-
-            <div class="card-body p-4">
-
-                <!-- Messages -->
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert 
-                            {% if message.tags == 'error' %}alert-danger
-                            {% elif message.tags == 'success' %}alert-success
-                            {% else %}alert-info
-                            {% endif %} alert-dismissible fade show">
-
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <!-- Transfer Form -->
-                <form method="POST">
-                    {% csrf_token %}
-
-                    <div class="mb-3">
-                        {{ form.as_p }}
+<div class="action-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-sm-8">
+                <div class="action-card">
+                    <div class="action-header">
+                        <div class="icon-wrap">🚀</div>
+                        <h2>Transfer Funds</h2>
+                        <p>Send money to another account instantly</p>
                     </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg rounded-3">
-                            🚀 Send Money
-                        </button>
-
-                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-3">
-                            Cancel
-                        </a>
+                    <div class="action-body">
+                        <form method="POST" id="transfer-form">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" id="transfer-submit-btn" class="btn-action-blue">Send Money</button>
+                        </form>
+                        <a href="{% url 'dashboard' %}" class="back-link">← Back to Dashboard</a>
                     </div>
-                </form>
-
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 {% endblock %}

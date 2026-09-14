@@ -1,196 +1,384 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard - Bank System{% endblock %}
+{% block title %}Dashboard - BankSystem{% endblock %}
 
 {% block content %}
-
 <style>
-.dashboard-card {
-    border-radius: 18px;
-    transition: 0.3s ease-in-out;
-    border: none;
-}
+    /* Balance Hero Card */
+    .balance-hero {
+        background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 50%, #7b2d8b 100%);
+        border-radius: 24px;
+        color: white;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(67, 97, 238, 0.35);
+        margin-bottom: 1.5rem;
+    }
+    .balance-hero::before {
+        content: '';
+        position: absolute;
+        top: -50px; right: -50px;
+        width: 200px; height: 200px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+    }
+    .balance-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -70px; left: -30px;
+        width: 250px; height: 250px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+    }
+    .balance-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        opacity: 0.75;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+    }
+    .balance-amount {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        line-height: 1;
+    }
+    .balance-account-no {
+        font-size: 0.85rem;
+        opacity: 0.65;
+        margin-top: 0.75rem;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 2px;
+    }
 
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-}
+    /* Stat cards */
+    .stat-card {
+        background: rgba(255,255,255,0.9);
+        border-radius: 18px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.6);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+    .stat-card:hover { transform: translateY(-4px); }
+    .stat-icon {
+        width: 48px; height: 48px;
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+    .stat-value {
+        font-size: 1.6rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        line-height: 1;
+    }
+    .stat-label {
+        font-size: 0.8rem;
+        color: #adb5bd;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.3rem;
+    }
 
-.summary-box {
-    background: linear-gradient(135deg, #198754, #20c997);
-    color: white;
-    border-radius: 18px;
-}
+    /* Quick Action Buttons */
+    .action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1.25rem 0.75rem;
+        border-radius: 16px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        text-align: center;
+        flex: 1;
+    }
+    .action-btn .action-icon {
+        font-size: 1.6rem;
+        display: block;
+    }
+    .action-btn-deposit {
+        background: rgba(25, 135, 84, 0.1);
+        color: #198754;
+        border: 1.5px solid rgba(25, 135, 84, 0.2);
+    }
+    .action-btn-deposit:hover {
+        background: #198754;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(25, 135, 84, 0.3);
+    }
+    .action-btn-withdraw {
+        background: rgba(255, 193, 7, 0.1);
+        color: #cc8800;
+        border: 1.5px solid rgba(255, 193, 7, 0.25);
+    }
+    .action-btn-withdraw:hover {
+        background: #e6a800;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 193, 7, 0.35);
+    }
+    .action-btn-transfer {
+        background: rgba(67, 97, 238, 0.1);
+        color: #4361ee;
+        border: 1.5px solid rgba(67, 97, 238, 0.2);
+    }
+    .action-btn-transfer:hover {
+        background: #4361ee;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35);
+    }
 
-.action-btns a{
-    margin-right: 10px;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 500;
-}
-
-.table thead{
-    font-size: 14px;
-    letter-spacing: 0.5px;
-}
+    /* Panel cards */
+    .panel-card {
+        background: rgba(255,255,255,0.9);
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.6);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        overflow: hidden;
+        height: 100%;
+    }
+    .panel-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #f1f3f5;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #2b2d42;
+    }
+    .panel-header .ph-icon {
+        font-size: 1.2rem;
+    }
+    .panel-body { padding: 0; }
+    .table {
+        margin: 0;
+    }
+    .table thead th {
+        background: #f8f9ff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: #adb5bd;
+        border: none;
+        padding: 0.9rem 1.25rem;
+    }
+    .table tbody td {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #f8f9ff;
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+    .table tbody tr:last-child td { border-bottom: none; }
+    .table tbody tr:hover { background: #fafbff; }
+    .badge-type {
+        padding: 0.35em 0.9em;
+        border-radius: 50px;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+    .badge-deposit   { background: rgba(25, 135, 84, 0.1); color: #198754; }
+    .badge-withdraw  { background: rgba(220, 53, 69, 0.1); color: #dc3545; }
+    .badge-transfer  { background: rgba(67, 97, 238, 0.1); color: #4361ee; }
+    .badge-login     { background: rgba(25, 135, 84, 0.1); color: #198754; }
+    .badge-logout    { background: rgba(220, 53, 69, 0.1); color: #dc3545; }
+    .empty-state {
+        padding: 3rem;
+        text-align: center;
+        color: #adb5bd;
+        font-size: 0.9rem;
+    }
+    .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .section-heading {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: #2b2d42;
+        margin-bottom: 0;
+    }
 </style>
 
-<div class="container-fluid py-4">
-
-    <!-- Welcome Header -->
-    <div class="summary-box p-4 mb-4 text-center shadow">
-        <h3 class="fw-bold">
-            Welcome, {{ request.user.first_name|default:request.user.username }}!
-        </h3>
-        <p class="mb-0">Your Banking Dashboard Overview</p>
-    </div>
-
-    <div class="row g-4">
-
-        <!-- Left Column -->
-        <div class="col-lg-4">
-
-            <!-- Account Info -->
-            <div class="card dashboard-card shadow-sm p-4 mb-4">
-                <h5 class="mb-3">💳 Account Information</h5>
-                <p><strong>Account Number:</strong> {{ account.account_number }}</p>
-                <p class="fs-5 text-success fw-bold">
-                    Balance: ${{ account.balance }}
-                </p>
-            </div>
-
-            <!-- Summary -->
-            <div class="card dashboard-card shadow-sm p-4">
-                <h5 class="mb-3">📊 Summary</h5>
-                <p class="mb-1">
-                    <strong>Total Deposits:</strong>
-                    <span class="text-success">${{ total_deposits }}</span>
-                </p>
-
-                <p class="mb-0">
-                    <strong>Total Withdrawals:</strong>
-                    <span class="text-danger">${{ total_withdrawals }}</span>
-                </p>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="card dashboard-card shadow-sm p-4 mt-4 text-center action-btns">
-
-                <h6 class="mb-3">Quick Actions</h6>
-
-                <a href="{% url 'deposit' %}" class="btn btn-success">Deposit</a>
-                <a href="{% url 'withdraw' %}" class="btn btn-warning">Withdraw</a>
-                <a href="{% url 'transfer' %}" class="btn btn-primary">Transfer</a>
-
-            </div>
-
+<!-- Welcome & Balance Hero -->
+<div class="balance-hero">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-amount">${{ account.balance }}</div>
+            <div class="balance-account-no">ACC • {{ account.account_number }}</div>
         </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0" style="position:relative;z-index:2;">
+            <div style="opacity:0.85; font-size:0.9rem; font-weight:500;">
+                Welcome back,
+            </div>
+            <div style="font-size:1.5rem; font-weight:800; letter-spacing:-0.5px;">
+                {{ request.user.first_name|default:request.user.username }} 👋
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- Right Column -->
-        <div class="col-lg-8">
+<!-- Stats Row -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(25,135,84,0.1);">💰</div>
+            <div class="stat-value text-success">${{ total_deposits }}</div>
+            <div class="stat-label">Total Deposits</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(220,53,69,0.1);">💸</div>
+            <div class="stat-value text-danger">${{ total_withdrawals }}</div>
+            <div class="stat-label">Total Withdrawals</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(67,97,238,0.1);">📋</div>
+            <div class="stat-value" style="color:#4361ee;">{{ transactions|length }}</div>
+            <div class="stat-label">Recent Txns</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(123,45,139,0.1);">🔐</div>
+            <div class="stat-value" style="color:#7b2d8b;">{{ activities|length }}</div>
+            <div class="stat-label">Activities</div>
+        </div>
+    </div>
+</div>
 
-            <!-- Recent Transactions -->
-            <div class="card dashboard-card shadow-sm p-4 mb-4">
+<!-- Quick Actions -->
+<div class="panel-card mb-4">
+    <div class="panel-header">
+        <span class="ph-icon">⚡</span>
+        <span class="section-heading">Quick Actions</span>
+    </div>
+    <div class="d-flex gap-3 p-3">
+        <a href="{% url 'deposit' %}" class="action-btn action-btn-deposit" id="quick-deposit-btn">
+            <span class="action-icon">➕</span>
+            Deposit
+        </a>
+        <a href="{% url 'withdraw' %}" class="action-btn action-btn-withdraw" id="quick-withdraw-btn">
+            <span class="action-icon">➖</span>
+            Withdraw
+        </a>
+        <a href="{% url 'transfer' %}" class="action-btn action-btn-transfer" id="quick-transfer-btn">
+            <span class="action-icon">🚀</span>
+            Transfer
+        </a>
+    </div>
+</div>
 
-                <h5 class="mb-3">📜 Recent Transactions</h5>
-
+<!-- Transactions & Activity -->
+<div class="row g-4">
+    <!-- Recent Transactions -->
+    <div class="col-lg-7">
+        <div class="panel-card">
+            <div class="panel-header">
+                <span class="ph-icon">📜</span>
+                <span class="section-heading">Recent Transactions</span>
+            </div>
+            <div class="panel-body">
                 {% if transactions %}
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-primary">
+                    <table class="table" id="transactions-table">
+                        <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Type</th>
                                 <th>Amount</th>
-                                <th>To Account</th>
                                 <th>Remarks</th>
                             </tr>
                         </thead>
-
                         <tbody>
                         {% for tx in transactions %}
                             <tr>
-                                <td class="text-muted">
-                                    {{ tx.date|date:"d M Y H:i" }}
-                                </td>
-
+                                <td class="text-muted" style="font-size:0.82rem;">{{ tx.date|date:"d M Y" }}<br><span style="opacity:0.6;">{{ tx.date|date:"H:i" }}</span></td>
                                 <td>
-                                    <span class="badge bg-info text-dark">
+                                    <span class="badge-type
+                                        {% if tx.transaction_type == 'Deposit' %}badge-deposit
+                                        {% elif tx.transaction_type == 'Withdraw' %}badge-withdraw
+                                        {% else %}badge-transfer{% endif %}">
                                         {{ tx.transaction_type }}
                                     </span>
                                 </td>
-
-                                <td class="fw-bold text-success">
-                                    ${{ tx.amount }}
-                                </td>
-
-                                <td>
-                                    {% if tx.to_account %}
-                                        {{ tx.to_account.account_number }}
+                                <td class="fw-700" style="font-weight:700;">
+                                    {% if tx.transaction_type == 'Withdraw' or tx.transaction_type == 'Transfer' %}
+                                        <span class="text-danger">-${{ tx.amount }}</span>
                                     {% else %}
-                                        -
+                                        <span class="text-success">+${{ tx.amount }}</span>
                                     {% endif %}
                                 </td>
-
-                                <td>
-                                    {{ tx.remarks|default:"-" }}
-                                </td>
+                                <td class="text-muted">{{ tx.remarks|default:"—" }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
-
                     </table>
                 </div>
-
                 {% else %}
-                    <p class="text-muted">No transactions found.</p>
+                <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <div>No transactions yet. Make your first deposit!</div>
+                </div>
                 {% endif %}
             </div>
+        </div>
+    </div>
 
-            <!-- Activity History -->
-            <div class="card dashboard-card shadow-sm p-4">
-
-                <h5 class="mb-3">🔐 Login / Logout History</h5>
-
+    <!-- Activity History -->
+    <div class="col-lg-5">
+        <div class="panel-card">
+            <div class="panel-header">
+                <span class="ph-icon">🔐</span>
+                <span class="section-heading">Login History</span>
+            </div>
+            <div class="panel-body">
                 {% if activities %}
                 <div class="table-responsive">
-                    <table class="table table-hover">
-
-                        <thead class="table-secondary">
+                    <table class="table" id="activity-table">
+                        <thead>
                             <tr>
                                 <th>Time</th>
-                                <th>Activity</th>
+                                <th>Event</th>
                             </tr>
                         </thead>
-
                         <tbody>
                         {% for activity in activities %}
                             <tr>
-
-                                <td>
-                                    {{ activity.timestamp|date:"d M Y H:i:s" }}
-                                </td>
-
+                                <td class="text-muted" style="font-size:0.82rem;">{{ activity.timestamp|date:"d M Y" }}<br><span style="opacity:0.6;">{{ activity.timestamp|date:"H:i:s" }}</span></td>
                                 <td>
                                     {% if activity.activity_type == 'Login' %}
-                                        <span class="badge bg-success px-3 py-2">Login</span>
+                                        <span class="badge-type badge-login">Login</span>
                                     {% else %}
-                                        <span class="badge bg-danger px-3 py-2">Logout</span>
+                                        <span class="badge-type badge-logout">Logout</span>
                                     {% endif %}
                                 </td>
-
                             </tr>
                         {% endfor %}
                         </tbody>
-
                     </table>
                 </div>
-
                 {% else %}
-                    <p class="text-muted">No login/logout history found.</p>
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <div>No activity recorded yet.</div>
+                </div>
                 {% endif %}
-
             </div>
-
         </div>
     </div>
 </div>

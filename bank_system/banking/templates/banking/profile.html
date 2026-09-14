@@ -1,17 +1,108 @@
 {% extends 'base.html' %}
-{% block title %}Profile - Bank System{% endblock %}
+{% block title %}Profile - BankSystem{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card p-4">
-            <h2 class="text-center mb-3">Update Profile</h2>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ u_form.as_p }}
-                {{ p_form.as_p }}
-                <button type="submit" class="btn btn-primary w-100">Update</button>
-            </form>
+<style>
+    .profile-wrapper { min-height: 65vh; display: flex; align-items: flex-start; padding: 1rem 0 3rem; }
+    .profile-card {
+        background: rgba(255,255,255,0.92);
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .profile-header {
+        background: linear-gradient(135deg, #7b2d8b, #4361ee);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        color: white;
+    }
+    .profile-avatar {
+        width: 80px; height: 80px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 1rem;
+        border: 3px solid rgba(255,255,255,0.4);
+    }
+    .profile-header h2 { font-weight: 800; font-size: 1.75rem; margin: 0; letter-spacing: -0.5px; }
+    .profile-header p { opacity: 0.82; margin: 0.4rem 0 0; font-size: 0.92rem; }
+    .profile-body { padding: 2.5rem; }
+    .profile-body label {
+        font-weight: 600; font-size: 0.875rem; color: #2b2d42;
+        margin-bottom: 0.4rem; display: block;
+    }
+    .profile-body input[type="text"],
+    .profile-body input[type="email"],
+    .profile-body input[type="file"] {
+        display: block; width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: 1.5px solid #e9ecef;
+        font-size: 0.95rem;
+        background: #faf8ff;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+        outline: none;
+        margin-bottom: 1.25rem;
+    }
+    .profile-body input:focus {
+        border-color: #7b2d8b;
+        box-shadow: 0 0 0 3px rgba(123,45,139,0.12);
+        background: #fff;
+    }
+    .profile-body p { margin: 0; }
+    .section-divider {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #adb5bd;
+        margin: 1.5rem 0 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .btn-action-purple {
+        padding: 0.85rem;
+        font-weight: 700; font-size: 1rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #7b2d8b, #4361ee);
+        border: none; color: white; width: 100%;
+        box-shadow: 0 6px 20px rgba(123,45,139,0.3);
+        transition: all 0.3s ease; cursor: pointer;
+    }
+    .btn-action-purple:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(123,45,139,0.4); }
+    .back-link {
+        display: block; text-align: center; margin-top: 1.25rem;
+        font-size: 0.9rem; color: #6c757d; text-decoration: none;
+    }
+    .back-link:hover { color: #7b2d8b; }
+</style>
+
+<div class="profile-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-9">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <h2>Edit Profile</h2>
+                        <p>Update your personal information</p>
+                    </div>
+                    <div class="profile-body">
+                        <form method="POST" enctype="multipart/form-data" id="profile-form">
+                            {% csrf_token %}
+                            <div class="section-divider">Account Details</div>
+                            {{ u_form.as_p }}
+                            <div class="section-divider">Profile Info</div>
+                            {{ p_form.as_p }}
+                            <button type="submit" id="profile-submit-btn" class="btn-action-purple mt-3">Save Changes</button>
+                        </form>
+                        <a href="{% url 'dashboard' %}" class="back-link">← Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Deposit - BankSystem{% endblock %}
+{% block title %}Withdraw - BankSystem{% endblock %}
 
 {% block content %}
 <style>
@@ -12,7 +12,7 @@
         overflow: hidden;
     }
     .action-header {
-        background: linear-gradient(135deg, #198754, #20c997);
+        background: linear-gradient(135deg, #e6a800, #ff6b35);
         padding: 2.25rem 2rem;
         text-align: center;
         color: white;
@@ -39,30 +39,42 @@
         border-radius: 10px;
         border: 1.5px solid #e9ecef;
         font-size: 1rem;
-        background: #f8fff9;
+        background: #fffaf5;
         font-family: 'Inter', sans-serif;
         transition: all 0.3s ease;
         outline: none;
         margin-bottom: 1.5rem;
     }
     .action-body input:focus {
-        border-color: #198754;
-        box-shadow: 0 0 0 3px rgba(25,135,84,0.12);
+        border-color: #e6a800;
+        box-shadow: 0 0 0 3px rgba(230,168,0,0.15);
         background: #fff;
     }
     .action-body p { margin: 0; }
-    .btn-action-green {
+    .btn-action-orange {
         padding: 0.85rem;
         font-weight: 700; font-size: 1rem;
         border-radius: 12px;
-        background: linear-gradient(135deg, #198754, #20c997);
+        background: linear-gradient(135deg, #e6a800, #ff6b35);
         border: none; color: white; width: 100%;
-        box-shadow: 0 6px 20px rgba(25,135,84,0.35);
+        box-shadow: 0 6px 20px rgba(230,168,0,0.35);
         transition: all 0.3s ease; cursor: pointer;
     }
-    .btn-action-green:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(25,135,84,0.45); }
+    .btn-action-orange:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(230,168,0,0.45); }
     .back-link { display: block; text-align: center; margin-top: 1.25rem; font-size: 0.9rem; color: #6c757d; text-decoration: none; }
-    .back-link:hover { color: #198754; }
+    .back-link:hover { color: #e6a800; }
+    .warning-notice {
+        background: rgba(255, 107, 53, 0.07);
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        font-size: 0.85rem;
+        color: #cc5500;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 </style>
 
 <div class="action-wrapper">
@@ -71,15 +83,19 @@
             <div class="col-md-5 col-sm-8">
                 <div class="action-card">
                     <div class="action-header">
-                        <div class="icon-wrap">➕</div>
-                        <h2>Deposit Money</h2>
-                        <p>Add funds to your account instantly</p>
+                        <div class="icon-wrap">➖</div>
+                        <h2>Withdraw Cash</h2>
+                        <p>Withdraw funds from your account</p>
                     </div>
                     <div class="action-body">
-                        <form method="POST" id="deposit-form">
+                        <div class="warning-notice">
+                            ⚠️ Ensure you have sufficient balance before withdrawing.
+                        </div>
+                        <form method="POST" id="withdraw-form">
                             {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" id="deposit-submit-btn" class="btn-action-green">Confirm Deposit</button>
+                            <label for="amount">Amount</label>
+                            <input type="number" name="amount" id="amount" placeholder="Enter amount to withdraw" step="0.01" min="0.01" required>
+                            <button type="submit" id="withdraw-submit-btn" class="btn-action-orange">Confirm Withdrawal</button>
                         </form>
                         <a href="{% url 'dashboard' %}" class="back-link">← Back to Dashboard</a>
                     </div>

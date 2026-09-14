@@ -1,11 +1,196 @@
 {% extends 'base.html' %}
-{% block title %}Home - Bank System{% endblock %}
+{% block title %}Welcome - BankSystem{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
-    <h1>Welcome to BankSystem</h1>
-    <p class="lead">Manage your finances quickly and securely online.</p>
-    <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-2">Get Started</a>
-    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">Login</a>
+<style>
+    .hero-section {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .hero-badge {
+        display: inline-block;
+        background: rgba(67, 97, 238, 0.1);
+        color: #4361ee;
+        border: 1px solid rgba(67, 97, 238, 0.3);
+        border-radius: 50px;
+        padding: 0.4rem 1.2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 1.5rem;
+    }
+    .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 800;
+        line-height: 1.15;
+        color: #1a1a2e;
+        letter-spacing: -1.5px;
+    }
+    .hero-title span {
+        background: linear-gradient(45deg, #4361ee, #7b2d8b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+        font-size: 1.15rem;
+        color: #6c757d;
+        max-width: 500px;
+        line-height: 1.7;
+    }
+    .hero-cta .btn {
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-accent {
+        border: 2px solid #4361ee;
+        color: #4361ee;
+        background: transparent;
+    }
+    .btn-outline-accent:hover {
+        background: rgba(67, 97, 238, 0.08);
+        color: #3a0ca3;
+        border-color: #3a0ca3;
+    }
+    .hero-stat {
+        text-align: center;
+        padding: 1.5rem;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+    .hero-stat:hover { transform: translateY(-4px); }
+    .hero-stat .value {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(45deg, #4361ee, #7b2d8b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero-stat .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+        margin-top: 0.25rem;
+    }
+    .feature-card {
+        background: rgba(255,255,255,0.85);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    .feature-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    .icon-blue  { background: rgba(67, 97, 238, 0.12); }
+    .icon-green { background: rgba(25, 135, 84, 0.12); }
+    .icon-purple{ background: rgba(123, 45, 139, 0.12); }
+    .section-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        letter-spacing: -0.5px;
+    }
+</style>
+
+<!-- Hero -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6" style="animation: fadeIn 0.8s ease-out;">
+                <div class="hero-badge">🏦 Modern Banking</div>
+                <h1 class="hero-title mb-3">
+                    Manage Your<br><span>Finances</span><br>Effortlessly
+                </h1>
+                <p class="hero-sub mb-4">
+                    A secure, fast, and intuitive platform to deposit, withdraw, and transfer money — all in one place.
+                </p>
+                <div class="hero-cta d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-primary" id="hero-get-started-btn">Get Started Free</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-accent" id="hero-login-btn">Sign In</a>
+                </div>
+            </div>
+            <div class="col-lg-6" style="animation: fadeIn 1s ease-out;">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="value">100%</div>
+                            <div class="label">Secure Transactions</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="value">24/7</div>
+                            <div class="label">Always Available</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="value">Instant</div>
+                            <div class="label">Money Transfers</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="value">Free</div>
+                            <div class="label">No Hidden Fees</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features -->
+<div class="container pb-5">
+    <div class="text-center mb-5">
+        <div class="hero-badge">✨ Features</div>
+        <h2 class="section-title mt-2">Everything You Need</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon icon-blue">💳</div>
+                <h5 class="fw-700 mb-2">Easy Deposits</h5>
+                <p class="text-muted mb-0">Add funds to your account instantly with a few clicks. No delays, no hassle.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon icon-green">🚀</div>
+                <h5 class="fw-700 mb-2">Fast Transfers</h5>
+                <p class="text-muted mb-0">Send money to any account number in seconds. Real-time balance updates.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon icon-purple">📊</div>
+                <h5 class="fw-700 mb-2">Transaction History</h5>
+                <p class="text-muted mb-0">Track every deposit, withdrawal, and transfer with detailed logs.</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
